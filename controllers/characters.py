@@ -15,7 +15,7 @@ async def get_characters_list(ctx):
         charlist += char
     mycursor.close()
     
-    await ctx.response.send_message(charlist)
-    
+    await ctx.send(charlist)
+
 async def setup(bot):
     bot.add_command(get_characters_list)
