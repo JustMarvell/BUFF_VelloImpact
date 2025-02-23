@@ -50,6 +50,16 @@ LOGGING_CONFIG = {
             'handlers' : ['console2', "file"],
             "level" : "INFO",
             "propagate" : False
+        },
+        "cogs" : {
+            'handlers' : ['console', "file"],
+            "level" : "INFO",
+            "propagate" : False
+        },
+        "tree" : {
+            'handlers' : ['console', "file"],
+            "level" : "INFO",
+            "propagate" : False
         }
     }
 }
