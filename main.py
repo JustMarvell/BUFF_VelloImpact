@@ -20,7 +20,7 @@ async def load_command():
     for cmd in settings.COMMAND_DIR.glob("*.py"):
         if cmd.name != "__init__.py":
             print(f'{cmd.name} loaded')
-            await client.load_extension(f'controllers.{cmd.name[:-3]}')
+            await client.load_extension(f'commands.{cmd.name[:-3]}')
         
 intents = discord.Intents.default()
 intents.message_content = True
