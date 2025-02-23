@@ -17,7 +17,7 @@ class Client(commands.Bot):
         
         
 async def load_command():
-    for cmd in settings.CONTROLER_COMMAND_DIR.glob("*.py"):
+    for cmd in settings.COMMAND_DIR.glob("*.py"):
         if cmd.name != "__init__.py":
             print(f'{cmd.name} loaded')
             await client.load_extension(f'controllers.{cmd.name[:-3]}')
