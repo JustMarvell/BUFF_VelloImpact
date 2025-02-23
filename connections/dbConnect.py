@@ -7,10 +7,4 @@ mydb = mysql.connector.connect (
     database = "pythondb_test"
 )
 
-async def Connect():
-    mycursor = mydb.cursor()
-    return mycursor
-
-async def Close():
-    mydb.close()
-    
+mycursor = mydb.cursor()

@@ -1,9 +1,9 @@
 import connections.dbConnect as db
 import discord
+
+mycursor = db.mycursor
     
 async def get_characters_list():
-    mycursor = await db.Connect()
-    
     sql = "SELECT char_name FROM characters"
     
     mycursor.execute(sql)
@@ -12,13 +12,10 @@ async def get_characters_list():
     charlist = []
     for char in myresult:
         charlist += char
-    mycursor.close()
     
     return charlist
 
 async def get_character_id(char_name : str):
-    mycursor = db.Connect()
-    
     sql = "SELECT id FROM characters WHERE char_name=%s"
     charname = (char_name, )
     
@@ -28,13 +25,10 @@ async def get_character_id(char_name : str):
     id = 0
     for result in myresult:
         id += result
-    mycursor.close()
         
     return id
 
 async def check_character(char_name: str):
-    mycursor = await db.Connect()
-    
     wildcard = f'%{char_name}%'
     
     sql = "SELECT char_name FROM characters WHERE char_name LIKE %s"
@@ -43,7 +37,6 @@ async def check_character(char_name: str):
     mycursor.execute(sql, charname)
     
     myresult = mycursor.fetchone()
-    mycursor.close()
     
     if myresult != None:
         name = ""
@@ -55,8 +48,6 @@ async def check_character(char_name: str):
         return None
 
 async def get_character_name(id : int):
-    mycursor = db.Connect()
-    
     sql = "SELECT char_name FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -66,13 +57,10 @@ async def get_character_name(id : int):
     name = ""
     for result in myresult:
         name += result
-    mycursor.close()
     
     return name
 
 async def get_character_quality(id : int):
-    mycursor = db.Connect()
-    
     sql = "SELECT quality FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -82,13 +70,10 @@ async def get_character_quality(id : int):
     quality = 0
     for result in myresult:
         quality += result
-    mycursor.close()
         
     return quality
 
 async def get_character_constelation_name(id: int):
-    mycursor = db.Connect()
-    
     sql = "SELECT constelation FROM characters WHERE id=%s"
     _id = (id, )
 
@@ -98,13 +83,10 @@ async def get_character_constelation_name(id: int):
     constelation = ""
     for result in myresult:
         constelation += result
-    mycursor.close()
         
     return constelation
 
 async def get_character_description(id: int):
-    mycursor = db.Connect()
-    
     sql = "SELECT char_desc FROM characters WHERE id=%s"
     _id = (id, )
 
@@ -114,13 +96,10 @@ async def get_character_description(id: int):
     desc = ""
     for result in myresult:
         desc += result
-    mycursor.close()
         
     return desc
 
 async def get_character_icon(id: int):
-    mycursor = db.Connect()
-    
     sql = "SELECT char_icon FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -130,13 +109,10 @@ async def get_character_icon(id: int):
     url = ""
     for result in myresult:
         url += result
-    mycursor.close()
     
     return url
 
 async def get_character_card(id: int):
-    mycursor = db.Connect()
-    
     sql = "SELECT char_card FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -146,13 +122,10 @@ async def get_character_card(id: int):
     url = ""
     for result in myresult:
         url += result
-    mycursor.close()
     
     return url
 
 async def get_character_list_based_on_quality(quality : int):
-    mycursor = await db.Connect()
-    
     sql = "SELECT char_name FROM characters WHERE quality = %s"
     char_quality = (quality, )
     
@@ -162,7 +135,6 @@ async def get_character_list_based_on_quality(quality : int):
     charlist = []
     for char in myresult:
         charlist += char
-    mycursor.close()
     
     return charlist
 
@@ -176,8 +148,6 @@ cryo = discord.Color.dark_grey()
 anemo = discord.Color.teal()
 #endregion
 async def get_element_color(id: int):
-    mycursor = db.Connect()
-    
     sql = "SELECT element FROM characters WHERE id=%s"
     _id = (id, )
 
@@ -185,7 +155,6 @@ async def get_element_color(id: int):
     myresult = mycursor.fetchone()
     
     element = ""
-    mycursor.close()
     
     for result in myresult:
         element += result
@@ -206,8 +175,6 @@ async def get_element_color(id: int):
         return dendro
 
 async def get_character_element(id : int):
-    mycursor = db.Connect()
-    
     sql = "SELECT element FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -217,13 +184,10 @@ async def get_character_element(id : int):
     element = ""
     for result in myresult:
         element += result
-    mycursor.close()
     
     return element
 
 async def get_character_weapon(id : int):
-    mycursor = db.Connect()
-    
     sql = "SELECT weapon_type FROM characters WHERE id=%s"
     _id = (id, )
     
@@ -233,6 +197,5 @@ async def get_character_weapon(id : int):
     weapon = ""
     for result in myresult:
         weapon += result
-    mycursor.close()
         
     return weapon
