@@ -88,7 +88,20 @@ class Weapons(commands.Cog):
         if await wb.PostWebhook(data) == False:
             await ctx.send("Failed to Get the list. Please try again in a few moments")
         
+    async def weapon_autocomplete(
+        self,
+        ctx : commands.Context,
+        current : str
+    ) -> typing.List[app_commands.Choice[str]]:
+        data = []
+        weaponlist = await wc.get_weapon_list()
+        for weapon in weaponlist:
+            if current.lower() in weapon.lower():
+                data.append(app_commands.Choice(name = weapon, value = weapon))
+        return data[:25]        
+
     @commands.hybrid_command()
+    @app_commands.autocomplete(weapon_name = weapon_autocomplete)
     async def show_weapon(self, ctx : commands.Context, *, weapon_name : str):
         """ Return a description of the selected weapon """
         
@@ -126,15 +139,3 @@ class Weapons(commands.Cog):
         embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki", icon_url = "https://static.wikia.nocookie.net/6a181c72-e8bf-419b-b4db-18fd56a0eb60")
         
         await ctx.send(embed = embed)
-            
-    @show_weapon.autocomplete("weapon_name")
-    async def character_autocomplete(
-        self,
-        ctx : commands.Context,
-        current : str
-    ) -> typing.List[app_commands.Choice[str]]:
-        data = []
-        weaponlist = await wc.get_weapon_list()
-        for weapon in weaponlist:
-            data.append(app_commands.Choice(name = weapon, value = weapon))
-        return data

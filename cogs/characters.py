@@ -56,8 +56,21 @@ class Characters(commands.Cog):
         if await wb.PostWebhook(data) == False:
             await ctx.send("Failed to Get the list. Please try again in a few moments")
         
-    # Added
+    
+    async def character_autocomplete(
+        self, 
+        ctx : commands.Context,
+        current : str
+    ) -> typing.List[app_commands.Choice[str]]:
+        data = []
+        charlist = await cc.get_characters_list()
+        for char in charlist:
+            if current.lower() in char.lower():
+                data.append(app_commands.Choice(name = char, value = char))
+        return data[:25]
+    
     @commands.hybrid_command()
+    @app_commands.autocomplete(char_name = character_autocomplete)
     async def show_character(self, ctx : commands.Context, *, char_name : str):
         """ show a character based on [char_name] """
         
@@ -90,15 +103,3 @@ class Characters(commands.Cog):
         
         await ctx.send(embed=embed)
         
-    # Added
-    @show_character.autocomplete("char_name")
-    async def character_autocomplete(
-        self, 
-        ctx : commands.Context,
-        current : str
-    ) -> typing.List[app_commands.Choice[str]]:
-        data = []
-        charlist = await cc.get_characters_list()
-        for char in charlist:
-            data.append(app_commands.Choice(name = char, value = char))
-        return data
