@@ -1,5 +1,6 @@
-import connections.dbConnect as db
+#import connections.dbConnect as db
 import discord
+from connections import dbConnect as db
 
 mycursor = db.mycursor
 onestarcolor = discord.Color.greyple()

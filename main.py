@@ -3,6 +3,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from cogs.characters import Characters
+from discord import Webhook
+import aiohttp
 
 logger = settings.logging.getLogger('bot')
 cogs_logger = settings.logging.getLogger('cogs')
@@ -50,5 +52,14 @@ async def reload_commands(interaction : discord.Interaction):
             reloaded_cogs += 1
     await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs')
     await client.tree.sync()
+    
+WEBHOOK_URL = 'https://discord.com/api/webhooks/1343569939260379208/VT63XQQI07TafusuXQPUPy4xiYWkzu8PSx_WvVkAGRPanqpHLmrWCAMloq6ViGCawn8j'
+    
+@client.tree.command(name = "webhook_test")
+async def test_hook(interaction : discord.Interaction):
+    await interaction.response.send_message("displaying")
+    async with aiohttp.ClientSession() as session:
+        webhook = Webhook.from_url(WEBHOOK_URL, session=session)
+        await webhook.send('Hello World', username='Foo')
 
 client.run(settings.DISCORD_API_SECRET, root_logger = True)

@@ -3,6 +3,7 @@ from discord import app_commands
 import controllers.characters as cc
 import discord
 import typing
+import connections.webhook as wb
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(Characters(bot))
@@ -33,11 +34,27 @@ class Characters(commands.Cog):
             field2 += f'{fiveindex}. {char}\n'
             fiveindex += 1
             
-        embed = discord.Embed(title = "Character List", description = "Here is the available characters in the database")
-        embed.add_field(name = "4 star character", value = field1, inline = False)
-        embed.add_field(name = "5 star character", value = field2, inline = False)
+        data = {
+            "embeds": [
+                {
+                    "title": "CHARACTER LIST"
+                },
+                {
+                    "title": "4 STAR CHARACTERS",
+                    "description": field1
+                },
+                {
+                    "title": "5 STAR CHARACTERS",
+                    "description" : field2
+                }
+            ],
+                "username": "[/] BUFF_VelloImpact",
+                "attachments": []
+            }
         
-        await ctx.send(embed = embed)
+        await ctx.send("Showing List....")
+        if await wb.PostWebhook(data) == False:
+            await ctx.send("Failed to Get the list. Please try again in a few moments")
         
     # Added
     @commands.hybrid_command()

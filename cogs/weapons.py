@@ -3,6 +3,7 @@ from discord import app_commands
 import controllers.weapons as wc
 import discord
 import typing
+import connections.webhook as wb
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(Weapons(bot))
@@ -53,18 +54,39 @@ class Weapons(commands.Cog):
             field5 += f'{fiveindex}. {weapon}\n'
             fiveindex += 1
             
-        embed = discord.Embed(title = "Weapon List", description = "Here is the available weapon in the database")
-        #embed.add_field(name = "1 star weapons", value = field1, inline = False)
-        #embed.add_field(name = "2 star weapons", value = field2, inline = False)
-        #embed.add_field(name = "3 star weapons", value = field3, inline = False)
-        #embed.add_field(name = "4 star weapons", value = field4, inline = False)
-        #embed.add_field(name = "5 star weapons", value = field5, inline = False)
+        data = {
+            "embeds": [
+                {
+                    "title": "WEAPON LIST"
+                },
+                {
+                    "title": "1 STAR WEAPONS",
+                    "description": field1
+                },
+                {
+                    "title": "2 STAR WEAPONS",
+                    "description" : field2
+                },
+                {
+                    "title": "3 STAR WEAPONS",
+                    "description" : field3
+                },
+                {
+                    "title": "4 STAR WEAPONS",
+                    "description" : field4
+                },
+                {
+                    "title": "5 STAR WEAPONS",
+                    "description" : field5
+                }
+            ],
+                "username": "[/] BUFF_VelloImpact",
+                "attachments": []
+            }
         
-        Fields = f'1 star weapons\n{field1}\n2 star weapons\n{field2}\n3 star weapons\n{field3}\n4 star weapons\n{field4}\n5 star weapons\n{field5}'
-        
-        embed.description = Fields
-        
-        await ctx.send(embed = embed)
+        await ctx.send("Showing List....")
+        if await wb.PostWebhook(data) == False:
+            await ctx.send("Failed to Get the list. Please try again in a few moments")
         
     @commands.hybrid_command()
     async def show_weapon(self, ctx : commands.Context, *, weapon_name : str):
