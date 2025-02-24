@@ -32,6 +32,8 @@ async def get_weapon_list_based_on_quality(quality : int):
     for weapon in myresult:
         weaponlist += weapon
     
+    weaponlist.sort()
+    
     return weaponlist
 
 async def check_weapon(weapon_name: str):

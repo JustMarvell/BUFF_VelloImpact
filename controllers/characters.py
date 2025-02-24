@@ -22,6 +22,7 @@ async def get_characters_list():
     charlist = []
     for char in myresult:
         charlist += char
+    charlist.sort()
     
     return charlist
 
@@ -154,6 +155,7 @@ async def get_character_list_based_on_quality(quality : int):
     charlist = []
     for char in myresult:
         charlist += char
+    charlist.sort()
     
     return charlist
 
