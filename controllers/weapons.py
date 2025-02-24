@@ -18,6 +18,7 @@ async def get_weapon_list():
     weaponlist = []
     for weapon in myresult:
         weaponlist += weapon
+    weaponlist.sort()
         
     return weaponlist
 
