@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord import app_commands
-import controllers.characters as cc
+from controllers.characters import CharacterControllers as cc
 import discord
 import typing
 
@@ -49,8 +49,9 @@ class Characters(commands.Cog):
         element = await cc.get_character_element(id)
         weapon = await cc.get_character_weapon(id)
         quality = await cc.get_character_quality(id)
+        stars = await cc.convert_quality_to_star(quality)
         
-        field1 = f'Name : {name}\nElement : {element}\nConstelation : {constelation}\nQuality : {quality} star\nWeapon : {weapon}'
+        field1 = f'Name : {name}\nElement : {element}\nConstelation : {constelation}\nQuality : {stars}\nWeapon : {weapon}'
         
         embed.colour = color
         embed.description = desc

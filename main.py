@@ -20,22 +20,42 @@ class Client(commands.Bot):
         logger.info(f'User : {self.user} (ID : {self.user.id})')
         
         # load commands
-        await load_command()
+        await load_commands()
         
         # sync to all servers and add to logger
         synced = await self.tree.sync()
         tree_logger.info(f'Sycned : {len(synced)} Commands to Global')
         
         
-async def load_command():
+async def load_commands():
     for cogs in settings.COGS_DIR.glob("*.py"):
         if cogs.name != "__init__.py":
             await client.load_extension(f'cogs.{cogs.name[:-3]}')
             # log the commands in the logger
             cogs_logger.info(f'Loaded ({cogs.name})')
-        
+    for controllers in settings.CONTROLLERS_DIR.glob("*.py"):
+        if controllers.name != "__init__.py":
+            await client.load_extension(f'controllers.{controllers.name[:-3]}')
+                    
 intents = discord.Intents.default()
 intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
+
+@client.tree.command(name = "reload_commands", description = "reload the commands list")
+async def reload_commands(interaction : discord.Interaction):
+    reloaded_cogs = 0
+    reloaded_controllers = 0
+    for cogs in settings.COGS_DIR.glob("*.py"):
+        if cogs.name != "__init__.py":
+            await client.reload_extension(f'cogs.{cogs.name[:-3]}')
+            # log the commands in the logger
+            # cogs_logger.info(f'Loaded ({cogs.name})')
+            reloaded_cogs += 1
+    for controllers in settings.CONTROLLERS_DIR.glob("*.py"):
+        if controllers.name != "__init__.py":
+            await client.reload_extension(f'controllers.{controllers.name[:-3]}')
+            reloaded_controllers += 1
+    await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs   |     Reloaded : {reloaded_controllers} controllers')
+    await client.tree.sync()
 
 client.run(settings.DISCORD_API_SECRET, root_logger = True)

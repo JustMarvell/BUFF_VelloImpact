@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord import app_commands
-import controllers.weapons as wc
+from controllers.weapons import WeaponControllers as wc
 import discord
 import typing
 
