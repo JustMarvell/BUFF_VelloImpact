@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord import app_commands
-from controllers.characters import CharacterControllers as cc
+import controllers.characters as cc
 import discord
 import typing
 
@@ -13,19 +13,30 @@ class Characters(commands.Cog):
     
     # Added
     @commands.hybrid_command()
-    async def get_characters_list(self, ctx : commands.Context):
-        """ Return list of characters in the database """
-        clist = await cc.get_characters_list()
-        cl = ""
-        i = 1
+    async def show_characters_list(self, ctx : commands.Context):
+        """ Return a list of available characters """
         
-        for c in clist:
-            cl += f'{i}. {c}\n'
-            i += 1
+        fourstarchar = await cc.get_character_list_based_on_quality(4)
+        fivestarchar = await cc.get_character_list_based_on_quality(5)
+        
+        field1 = ""
+        field2 = ""
+
+        fourindex = 1
+        fiveindex = 1
+
+        for char in fourstarchar:
+            field1 += f'{fourindex}. {char}\n'
+            fourindex += 1
             
-        embed = discord.Embed(title = "Character List Test")
-        embed.add_field(name = "list", value = cl, inline = False)
+        for char in fivestarchar:
+            field2 += f'{fiveindex}. {char}\n'
+            fiveindex += 1
             
+        embed = discord.Embed(title = "Character List", description = "Here is the available characters in the database")
+        embed.add_field(name = "4 star character", value = field1, inline = False)
+        embed.add_field(name = "5 star character", value = field2, inline = False)
+        
         await ctx.send(embed = embed)
         
     # Added
@@ -36,7 +47,7 @@ class Characters(commands.Cog):
         name = await cc.check_character(char_name)
         
         if name != None:
-            embed = discord.Embed(title=name)
+            embed = discord.Embed(title=f'Genshin Impact Fandom Wiki | Characters | {name}')
         else:
             await ctx.send(f'Theres no character named : {char_name} in the database')
             return
@@ -51,14 +62,14 @@ class Characters(commands.Cog):
         quality = await cc.get_character_quality(id)
         stars = await cc.convert_quality_to_star(quality)
         
-        field1 = f'Name : {name}\nElement : {element}\nConstelation : {constelation}\nQuality : {stars}\nWeapon : {weapon}'
+        field1 = f'Name : {name}\nElement : {element}\nConstelation : {constelation}\nQuality : {stars}\nWeapon Type: {weapon}'
         
         embed.colour = color
         embed.description = desc
         embed.set_thumbnail(url = "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Site-logo.png/revision/latest?cb=20210723101020")
         embed.set_image(url = icon)
-        embed.set_author(name= "Genshin Impact Fandom Wiki", url = "https://genshin-impact.fandom.com/wiki/Genshin_Impact_Wiki", icon_url= "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Site-logo.png/revision/latest?cb=20210723101020")
-        embed.add_field(name = f'About {name}', value = field1, inline = False)
+        embed.add_field(name = f'CHARACTER INFO', value = field1, inline = False)
+        embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki")
         
         await ctx.send(embed=embed)
         

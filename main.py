@@ -33,9 +33,6 @@ async def load_commands():
             await client.load_extension(f'cogs.{cogs.name[:-3]}')
             # log the commands in the logger
             cogs_logger.info(f'Loaded ({cogs.name})')
-    for controllers in settings.CONTROLLERS_DIR.glob("*.py"):
-        if controllers.name != "__init__.py":
-            await client.load_extension(f'controllers.{controllers.name[:-3]}')
                     
 intents = discord.Intents.default()
 intents.message_content = True
@@ -51,11 +48,7 @@ async def reload_commands(interaction : discord.Interaction):
             # log the commands in the logger
             # cogs_logger.info(f'Loaded ({cogs.name})')
             reloaded_cogs += 1
-    for controllers in settings.CONTROLLERS_DIR.glob("*.py"):
-        if controllers.name != "__init__.py":
-            await client.reload_extension(f'controllers.{controllers.name[:-3]}')
-            reloaded_controllers += 1
-    await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs   |     Reloaded : {reloaded_controllers} controllers')
+    await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs')
     await client.tree.sync()
 
 client.run(settings.DISCORD_API_SECRET, root_logger = True)
