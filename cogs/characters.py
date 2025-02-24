@@ -69,7 +69,7 @@ class Characters(commands.Cog):
         embed.set_thumbnail(url = "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Site-logo.png/revision/latest?cb=20210723101020")
         embed.set_image(url = icon)
         embed.add_field(name = f'CHARACTER INFO', value = field1, inline = False)
-        embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki")
+        embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki", icon_url = "https://static.wikia.nocookie.net/6a181c72-e8bf-419b-b4db-18fd56a0eb60")
         
         await ctx.send(embed=embed)
         

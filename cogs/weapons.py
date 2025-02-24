@@ -54,12 +54,16 @@ class Weapons(commands.Cog):
             fiveindex += 1
             
         embed = discord.Embed(title = "Weapon List", description = "Here is the available weapon in the database")
-        embed.add_field(name = "1 star weapons", value = field1, inline = False)
-        embed.add_field(name = "2 star weapons", value = field2, inline = False)
-        embed.add_field(name = "3 star weapons", value = field3, inline = False)
-        embed.add_field(name = "4 star weapons", value = field4, inline = False)
-        embed.add_field(name = "5 star weapons", value = field5, inline = False)
-            
+        #embed.add_field(name = "1 star weapons", value = field1, inline = False)
+        #embed.add_field(name = "2 star weapons", value = field2, inline = False)
+        #embed.add_field(name = "3 star weapons", value = field3, inline = False)
+        #embed.add_field(name = "4 star weapons", value = field4, inline = False)
+        #embed.add_field(name = "5 star weapons", value = field5, inline = False)
+        
+        Fields = f'1 star weapons\n{field1}\n2 star weapons\n{field2}\n3 star weapons\n{field3}\n4 star weapons\n{field4}\n5 star weapons\n{field5}'
+        
+        embed.description = Fields
+        
         await ctx.send(embed = embed)
         
     @commands.hybrid_command()
@@ -97,7 +101,7 @@ class Weapons(commands.Cog):
         embed.add_field(name = "WEAPON STATS", value = weapon_base_stats_field, inline = False)
         embed.add_field(name = f'PASSIVE SKILL : {weapon_skill_name}', value = weapon_skill_field, inline = False)
         embed.set_image(url = weapon_icon)
-        embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki")
+        embed.set_footer(text = "Data collected from Genshin Impact Fandom Wiki", icon_url = "https://static.wikia.nocookie.net/6a181c72-e8bf-419b-b4db-18fd56a0eb60")
         
         await ctx.send(embed = embed)
             
