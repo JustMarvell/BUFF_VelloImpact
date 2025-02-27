@@ -11,8 +11,6 @@ cogs_logger = settings.logging.getLogger('cogs')
 tree_logger = settings.logging.getLogger('tree')
 
 class Client(commands.Bot):  
-    # TODO & REMINDER : 
-    # CHANGE on_ready to setup_hook(self):
     async def setup_hook(self):
         # sync to a specific guild
         # [delete this comment] test_guild = discord.Object(id=...)  # change ... to your test guild_id
@@ -47,19 +45,8 @@ async def reload_commands(interaction : discord.Interaction):
     for cogs in settings.COGS_DIR.glob("*.py"):
         if cogs.name != "__init__.py":
             await client.reload_extension(f'cogs.{cogs.name[:-3]}')
-            # log the commands in the logger
-            # cogs_logger.info(f'Loaded ({cogs.name})')
             reloaded_cogs += 1
     await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs')
     await client.tree.sync()
-    
-WEBHOOK_URL = 'https://discord.com/api/webhooks/1343569939260379208/VT63XQQI07TafusuXQPUPy4xiYWkzu8PSx_WvVkAGRPanqpHLmrWCAMloq6ViGCawn8j'
-    
-@client.tree.command(name = "webhook_test")
-async def test_hook(interaction : discord.Interaction):
-    await interaction.response.send_message("displaying")
-    async with aiohttp.ClientSession() as session:
-        webhook = Webhook.from_url(WEBHOOK_URL, session=session)
-        await webhook.send('Hello World', username='Foo')
 
 client.run(settings.DISCORD_API_SECRET, root_logger = True)
