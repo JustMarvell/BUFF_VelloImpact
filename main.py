@@ -46,7 +46,8 @@ async def reload_commands(interaction : discord.Interaction):
         if cogs.name != "__init__.py":
             await client.reload_extension(f'cogs.{cogs.name[:-3]}')
             reloaded_cogs += 1
-    await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs')
+    await interaction.response.send_message(f'Reloaded : {reloaded_cogs} cogs. Auto delete after 4 Seconds', delete_after=4)
+    
     await client.tree.sync()
 
 client.run(settings.DISCORD_API_SECRET, root_logger = True)
