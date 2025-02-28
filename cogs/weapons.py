@@ -6,7 +6,7 @@ import typing
 import connections.webhook as wb
 
 async def setup(bot : commands.Bot):
-    await bot.add_cog(Weapons(bot))
+    await bot.add_cog(Weapons(bot)) 
 
 class Weapons(commands.Cog):
     def __init__(self, bot):

@@ -68,7 +68,20 @@ class Artefacts(commands.Cog):
             #await ctx.send("Failed to Get the list. Please try again in a few moments")
             await ctx.send(common)
             
+    async def artefact_autocomplete(
+        self, 
+        ctx : commands.Context,
+        current : str
+    ) -> typing.List[app_commands.Choice[str]]:
+        data = []
+        artelist = await ac.get_artefact_list()
+        for arte in artelist:
+            if current.lower() in arte.lower():
+                data.append(app_commands.Choice(name = arte, value = arte))
+        return data[:25]
+            
     @commands.hybrid_command(pass_context = True)
+    @app_commands.autocomplete(set_name = artefact_autocomplete)
     async def show_artefact(self, ctx : commands.Context, *, set_name : str):
         """ show an artefact set based on [set_name] """
         
@@ -98,7 +111,7 @@ class Artefacts(commands.Cog):
         field1 = f'Set Name : {name}\nQuality : {quality}\n'
         field2 = f'{bonus_2pc}\n'
         field3 = f'{bonus_4pc}\n'
-        field4 = f'*Flower of Life :*\n{flower_name}\n*Plume of Death :*\n{plume_name}\n*Sands of Eon :*\n{sands_name}\n*Goblet of Eonothem :*\n{goblet_name}*\nCirclet of Logos :*\n{circlet_name}'
+        field4 = f'\n{flower_name}\n*Plume of Death :*\n{plume_name}\n*Sands of Eon :*\n{sands_name}\n*Goblet of Eonothem :*\n{goblet_name}*\nCirclet of Logos :*\n{circlet_name}'
 
         embed.color = discord.Color.dark_gold()
         embed.set_thumbnail(url = "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Site-logo.png/revision/latest?cb=20210723101020")
@@ -111,83 +124,82 @@ class Artefacts(commands.Cog):
         data = {
             "embeds": [
                 {
-                    "title": "Genshin Impact Fandom Wiki | Artefacts | {name}",
-                    "color": None,
+                    "title": "Genshin Impact Fandom Wiki | Artefacts | f'{name}'",
                     "fields": [
                         {
                             "name": "ARTEFACT INFO",
-                            "value": "Set Name : name\nQuality : quality",
+                            "value": field1,
                             "inline": True
                         },
                         {
                             "name": "2 PIECE BONUS",
-                            "value": "Geo DMG Bonus +15%",
+                            "value": field2,
                             "inline": True
                         },
                         {
                             "name": "4 PIECE BONUS",
-                            "value": "Upon obtaining an Elemental Shard created through a Crystallize Reaction, all party members gain 35% DMG Bonus for that particular element for 10s. Only one form of Elemental DMG Bonus can be gained in this manner at any one time."
+                            "value": field3
                         },
                         {
                             "name": "FLOWER OF LIFE",
-                            "value": "Flower of Creviced Cliff"
+                            "value": flower_name
                         }    
                     ],
                         "image": {
-                        "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9f/Item_Flower_of_Creviced_Cliff.png/revision/latest?cb=20201120064841"
+                        "url": flower_icon
                     },
                         "thumbnail": {
                         "url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Site-logo.png/revision/latest?cb=20210723101020"
                     }
                 },
                 {
-                    "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9f/Item_Flower_of_Creviced_Cliff.png/revision/latest?cb=20201120064841",
+                    "url": flower_icon,
                     "color": None,
                     "fields": [
                         {
                             "name": "PLUME OF DEATH",
-                            "value": "Feather of Jagged Peaks",
+                            "value": plume_name,
                             "inline": True
                         },
                         {
                             "name": "SANDS OF EON",
-                            "value": "Sundial of Enduring Jade",
+                            "value": sands_name,
                             "inline": True
                         }
                     ],
                         "image": {
-                        "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a5/Item_Feather_of_Jagged_Peaks.png/revision/latest?cb=20201120064919"
+                        "url": plume_icon
                     }
                 },
                 {
-                    "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9f/Item_Flower_of_Creviced_Cliff.png/revision/latest?cb=20201120064841",
+                    "url": flower_icon,
                     "image": {
-                        "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1d/Item_Sundial_of_Enduring_Jade.png/revision/latest?cb=20201120064941"
+                        "url": sands_icon
                     }
                 },
                 {
-                    "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/02/Item_Goblet_of_Chiseled_Crag.png/revision/latest?cb=20201120064951",
+                    "url": goblet_icon,
                     "color": None,
                     "fields": [
                         {
                             "name": "GOBLET OF EONOTHEM",
-                            "value": "Goblet of Chiseled Crag",
+                            "value": goblet_name,
                             "inline": True
                         },
                         {
                             "name": "CIRCLET OF LOGOS",
-                            "value": "Mask of Solitude Basalt",
+                            "value": circlet_name,
                             "inline": True
                         }
                     ],
                     "image": {
-                        "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/02/Item_Goblet_of_Chiseled_Crag.png/revision/latest?cb=20201120064951"
+                        "url": goblet_icon
                     }
                 },
                 {
-                    "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/02/Item_Goblet_of_Chiseled_Crag.png/revision/latest?cb=20201120064951",
+                    "url": goblet_icon,
                     "image": {
-                        "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/09/Item_Mask_of_Solitude_Basalt.png/revision/latest?cb=20201120065000"
+                        "url": circlet_icon
                     }
                 }
             ],

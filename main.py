@@ -10,7 +10,7 @@ logger = settings.logging.getLogger('bot')
 cogs_logger = settings.logging.getLogger('cogs')
 tree_logger = settings.logging.getLogger('tree')
 
-class Client(commands.Bot):  
+class Client(commands.Bot): 
     async def setup_hook(self):
         # sync to a specific guild
         # [delete this comment] test_guild = discord.Object(id=...)  # change ... to your test guild_id
