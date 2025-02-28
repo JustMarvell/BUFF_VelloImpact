@@ -4,6 +4,7 @@ import controllers.artefacts as ac
 import discord
 import typing
 import connections.webhook as wb
+import random
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(Artefacts(bot))
@@ -75,6 +76,7 @@ class Artefacts(commands.Cog):
     ) -> typing.List[app_commands.Choice[str]]:
         data = []
         artelist = await ac.get_artefact_list()
+        artelist.append('random')
         for arte in artelist:
             if current.lower() in arte.lower():
                 data.append(app_commands.Choice(name = arte, value = arte))
@@ -83,9 +85,15 @@ class Artefacts(commands.Cog):
     @commands.hybrid_command(pass_context = True)
     @app_commands.autocomplete(set_name = artefact_autocomplete)
     async def show_artefact(self, ctx : commands.Context, *, set_name : str):
-        """ show an artefact set based on [set_name] """
+        """ show an artefact set based on [set_name] or [random] """
         
-        name = await ac.check_artefact(set_name)
+        if set_name == 'random':
+            lst = await ac.get_artefact_list()
+            c = len(lst) - 1
+            r = random.randint(0, c)
+            name = lst[r]
+        else:
+            name = await ac.get_artefact_list(set_name)
 
         if name != None:
             embed = discord.Embed(title = f'Genshin Impact Fandom Wiki | Artefacts | {name}')
@@ -108,7 +116,7 @@ class Artefacts(commands.Cog):
         circlet_name = await ac.get_circlet_name(id)
         circlet_icon = await ac.get_circlet_icon(id)
 
-        field1 = f'Set Name : {name}\nQuality : {quality}\n'
+        field1 = f'Set Name : {name}\nQuality : {quality} ⭐ \n'
         field2 = f'{bonus_2pc}\n'
         field3 = f'{bonus_4pc}\n'
         field4 = f'\n{flower_name}\n*Plume of Death :*\n{plume_name}\n*Sands of Eon :*\n{sands_name}\n*Goblet of Eonothem :*\n{goblet_name}*\nCirclet of Logos :*\n{circlet_name}'
@@ -124,7 +132,7 @@ class Artefacts(commands.Cog):
         data = {
             "embeds": [
                 {
-                    "title": "Genshin Impact Fandom Wiki | Artefacts | f'{name}'",
+                    "title": f"Genshin Impact Fandom Wiki | Artefacts | {name}",
                     "fields": [
                         {
                             "name": "ARTEFACT INFO",

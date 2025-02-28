@@ -1,3 +1,4 @@
-import weapon_webscrapper as f
+dummy = ['asdfa', 'asdfasdkfa', 'asdkjfahskdf', 'asljdkfhasdf']
 
-f.scrape_weapon()
+r = dummy.count()
+print(r)

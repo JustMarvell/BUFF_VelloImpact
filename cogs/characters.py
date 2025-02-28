@@ -4,6 +4,7 @@ import controllers.characters as cc
 import discord
 import typing
 import connections.webhook as wb
+import random
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(Characters(bot))
@@ -64,6 +65,7 @@ class Characters(commands.Cog):
     ) -> typing.List[app_commands.Choice[str]]:
         data = []
         charlist = await cc.get_characters_list()
+        charlist.append('random')
         for char in charlist:
             if current.lower() in char.lower():
                 data.append(app_commands.Choice(name = char, value = char))
@@ -72,9 +74,16 @@ class Characters(commands.Cog):
     @commands.hybrid_command()
     @app_commands.autocomplete(char_name = character_autocomplete)
     async def show_character(self, ctx : commands.Context, *, char_name : str):
-        """ show a character based on [char_name] """
+        """ show a character based on [char_name] or [random] to select random character """
         
-        name = await cc.check_character(char_name)
+    
+        if char_name == 'random':
+            lst = await cc.get_characters_list()
+            c = len(lst) - 1
+            r = random.randint(0, c)
+            name = lst[r]
+        else:
+            name = await cc.check_character(char_name)
         
         if name != None:
             embed = discord.Embed(title=f'Genshin Impact Fandom Wiki | Characters | {name}')

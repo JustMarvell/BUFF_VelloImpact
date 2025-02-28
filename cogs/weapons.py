@@ -4,6 +4,7 @@ import controllers.weapons as wc
 import discord
 import typing
 import connections.webhook as wb
+import random
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(Weapons(bot)) 
@@ -95,6 +96,7 @@ class Weapons(commands.Cog):
     ) -> typing.List[app_commands.Choice[str]]:
         data = []
         weaponlist = await wc.get_weapon_list()
+        weaponlist.append('random')
         for weapon in weaponlist:
             if current.lower() in weapon.lower():
                 data.append(app_commands.Choice(name = weapon, value = weapon))
@@ -103,9 +105,15 @@ class Weapons(commands.Cog):
     @commands.hybrid_command()
     @app_commands.autocomplete(weapon_name = weapon_autocomplete)
     async def show_weapon(self, ctx : commands.Context, *, weapon_name : str):
-        """ Return a description of the selected weapon """
+        """ Return a description of the selected weapon or [random] """
         
-        weapon = await wc.check_weapon(weapon_name)
+        if weapon_name == 'random':
+            lst = await wc.get_weapon_list()
+            c = len(lst) - 1
+            r = random.randint(0, c)
+            weapon = lst[r]
+        else:
+            weapon = await wc.check_weapon(weapon_name)
         
         if weapon != None:
             id = await wc.get_weapon_id(weapon)
